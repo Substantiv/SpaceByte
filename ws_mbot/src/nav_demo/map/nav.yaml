@@ -1,0 +1,14 @@
+# 地图图片资源路径
+image: /home/zjc/Development/ws_mbot/src/nav_demo/map/nav.pgm
+# 地图刻度值，单位为 米每像素
+resolution: 0.050000
+# 地图的位姿信息：相对于rviz原点的位姿信息(x, y, theta)
+origin: [-50.000000, -50.000000, 0.000000]
+# 地图中黑白部分是否取反
+# 黑色为障碍物区域，白色为可通行区域，白灰为未知区域
+negate: 0
+# 占用阈值月空闲阈值相结合用来判断障碍物
+# 占用阈值: 像素大于该阈值定义为障碍物
+occupied_thresh: 0.65
+# 空闲阈值: 像素小于该阈值定义为可通行区域
+free_thresh: 0.196

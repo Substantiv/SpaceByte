@@ -1,0 +1,7 @@
+<launch>
+    <!-- SlAM 实现 -->
+    <include file="$(find nav_demo)/launch/nav_sim.launch" />
+
+    <include file="$(find nav_demo)/launch/nav_path.launch" />
+
+</launch>
