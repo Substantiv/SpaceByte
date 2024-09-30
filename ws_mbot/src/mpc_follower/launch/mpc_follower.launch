@@ -1,0 +1,52 @@
+<launch>
+    <!-- 设置launch文件的参数，核心是指定hometown_room.world -->
+    <arg name="world_name" value="$(find mbot_gazebo)/worlds/box_house.world"/>
+    <!-- 是否以暂停状态启动gazebo -->
+    <arg name="paused" default="false"/>
+
+    <arg name="use_sim_time" default="true"/>
+    <!-- 是否启动gazebo的GUI -->
+    <arg name="gui" default="true"/>
+
+    <arg name="headless" default="false"/>
+    <!-- 是否使用gdb在调试模式下启动gzserver(gazebo服务器) -->
+    <arg name="debug" default="false"/>
+
+    <!-- 运行gazebo仿真环境，使用gazebo_ros自带的empty_world.launch -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)" />
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+    <!-- 加载机器人模型描述参数，即mbot_base.xacro -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find mbot_gazebo)/urdf/mbot_base.xacro'" /> 
+
+    <!-- 运行joint_state_publisher节点，发布机器人的关节状态  -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+
+    <!-- 运行robot_state_publ~isher节点，发布tf  -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        <param name="publish_frequency" type="double" value="50.0" />
+    </node>
+
+    <!-- 使用spawn_model，在gazebo中加载机器人模型-->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          args="-urdf -model mbot -param robot_description"/> 
+
+	<!-- 运行rviz可视化界面，其中mbot_gazebo.rviz是之前保存的 -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find mbot_gazebo)/config/mbot_gazebo.rviz" required="true" />
+
+    <!-- 通过amcl获取定位信息 -->
+    <include file="$(find nav_demo)/launch/mbot_amcl.launch" />
+
+    <!-- 生成跟踪轨迹 -->
+    <node pkg="mpc_follower" type="traj_generate" name="traj_generate" />
+
+    <!-- MPC 轨迹跟踪 -->
+    <node pkg="mpc_follower" type="local_planner" name="local_planner" />
+
+</launch>

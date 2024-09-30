@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(mbot_gazebo)
+project(mpc_follower)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,14 +8,8 @@ project(mbot_gazebo)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  gazebo_plugins
-  gazebo_ros
-  gazebo_ros_control
-  geometry_msgs
-  roscpp
   rospy
-  urdf
-  xacro
+  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -75,7 +69,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs
+#   std_msgs
 # )
 
 ################################################
@@ -109,8 +103,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES mbot_gazebo
-#  CATKIN_DEPENDS gazebo_plugins gazebo_ros gazebo_ros_control geometry_msgs roscpp rospy urdf xacro
+#  LIBRARIES mpc_follower
+#  CATKIN_DEPENDS rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -120,14 +114,14 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-# include_directories(
-# # include
-#   ${catkin_INCLUDE_DIRS}
-# )
+include_directories(
+# include
+  ${catkin_INCLUDE_DIRS}
+)
 
 ## Declare a C++ library
-# add_library(timer_node
-#   src/mpc_node.cpp
+# add_library(${PROJECT_NAME}
+#   src/${PROJECT_NAME}/mpc_follower.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -138,7 +132,7 @@ catkin_package(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(timer_node src/mpc_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/mpc_follower_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -148,11 +142,11 @@ catkin_package(
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(timer_node src/mpc_node.cpp)
+# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(timer_node
-#   ${catkin_LIBRARIES} casadi
+# target_link_libraries(${PROJECT_NAME}_node
+#   ${catkin_LIBRARIES}
 # )
 
 #############
@@ -191,8 +185,10 @@ catkin_package(
 # )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(TARGETS timer_node
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# install(FILES
+#   # myfile1
+#   # myfile2
+#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
 #############
@@ -200,7 +196,7 @@ catkin_package(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_mbot_gazebo.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_mpc_follower.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
