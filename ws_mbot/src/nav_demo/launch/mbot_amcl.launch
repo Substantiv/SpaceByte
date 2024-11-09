@@ -1,7 +1,0 @@
-<launch>
-    <!-- 加载地图服务 -->
-    <include file="$(find nav_demo)/launch/nav_map_server.launch" />
-        
-    <!-- 配置 acml 文件 -->
-    <include file="$(find nav_demo)/launch/nav_amcl.launch" />
-</launch>

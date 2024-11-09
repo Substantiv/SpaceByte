@@ -34,7 +34,7 @@ agent = DQN(state_dim, hidden_dim, action_dim, lr, gamma, epsilon, target_update
 
 return_list = []
 for i in range(10):
-    with tqdm(total=int(num_episodes / 10), desc='Iteration %d' % i+1) as pbar:
+    with tqdm(total=int(num_episodes / 10), desc='Iteration %d' % i) as pbar:
         for i_episode in range(int(num_episodes / 10)):
             episode_return = 0
             state = env.reset()
@@ -71,7 +71,7 @@ plt.plot(episodes_list, return_list)
 plt.xlabel('Episodes')
 plt.ylabel('Returns')
 plt.title('DQN on {}'.format(env_name))
-plt.show()
+# plt.show()
 
 mv_return = rl_utils.moving_average(return_list, 9)
 plt.plot(episodes_list, mv_return)

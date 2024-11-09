@@ -1,9 +1,0 @@
-<!-- 继承导航相关的文件 -->
-<launch>
-    <!-- 加载已经建好的地图 -->
-    <include file="$(find nav_demo)/launch/nav_map_server.launch" />
-    <!-- 启动 amcl 定位 -->
-    <include file="$(find nav_demo)/launch/nav_amcl.launch" />
-    <!-- 启动 move_base 进行路径规划 -->
-    <include file="$(find nav_demo)/launch/nav_path.launch" />
-</launch>

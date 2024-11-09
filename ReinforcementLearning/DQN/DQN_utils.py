@@ -18,6 +18,7 @@ class ReplayBuffer:
 
     def sample(self, batch_size):  # 从buffer中采样数据,数量为batch_size
         transitions = random.sample(self.buffer, batch_size)
+        # 将 transitions 列表中的元组解压缩成五个不同的集合。每个集合对应于转移中的一个元素。
         state, action, reward, next_state, done = zip(*transitions)
         return np.array(state), action, reward, np.array(next_state), done
 
@@ -42,8 +43,7 @@ class DQN:
         self.action_dim = action_dim
         self.q_net = Qnet(state_dim, hidden_dim, self.action_dim).to(device)  # Q网络
         # 目标网络
-        self.target_q_net = Qnet(state_dim, hidden_dim,
-                                 self.action_dim).to(device)
+        self.target_q_net = Qnet(state_dim, hidden_dim, self.action_dim).to(device)
         # 使用Adam优化器
         self.optimizer = torch.optim.Adam(self.q_net.parameters(), lr=learning_rate)
         self.gamma = gamma  # 折扣因子
@@ -54,8 +54,10 @@ class DQN:
 
     def take_action(self, state):  # epsilon-贪婪策略采取动作
         if np.random.random() < self.epsilon:
+            # 选择随机动作
             action = np.random.randint(self.action_dim)
         else:
+            # 选择最佳动作
             state = torch.tensor(state, dtype=torch.float).to(self.device)
             action = self.q_net(state).argmax().item()
         return action
